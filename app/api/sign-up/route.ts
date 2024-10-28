@@ -26,10 +26,11 @@ export async function POST(request: Request) {
 
     const existingUserByEmail = await UserModel.findOne({ email });
 
-    // generating the 6 digit otp code 
+    // generating the 6 digit otp code
     let verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     if (existingUserByEmail) {
+      // check if the user is verifed and send error that email exists
       if (existingUserByEmail.isVerified) {
         return Response.json(
           {
@@ -38,14 +39,18 @@ export async function POST(request: Request) {
           },
           { status: 400 }
         );
-      } else {
+      }
+      // if the email exists but the user if not verifed so send the mail to verify
+      else {
         const hashedPassword = await bcrypt.hash(password, 10);
         existingUserByEmail.password = hashedPassword;
         existingUserByEmail.verifyCode = verifyCode;
         existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
         await existingUserByEmail.save();
       }
-    } else {
+    }
+    // create the user since now user with email found F
+    else {
       const hashedPassword = await bcrypt.hash(password, 10);
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);

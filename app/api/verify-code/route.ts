@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   await dbConnect();
   try {
     const { username, code } = await request.json();
-    const decodedUsername = decodeURIComponent(username);
+    const decodedUsername = decodeURIComponent(username); // decoded url encoded chars in string 
 
     const user = await UserModel.findOne({ username: decodedUsername });
 

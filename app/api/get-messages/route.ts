@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const userId = new mongoose.Types.ObjectId(_user._id); // this is done becuase it may cause some issue while doing aggregation pipeline operation
+  const userId = new mongoose.Types.ObjectId(_user._id); // this is done becuase it may cause some issue while doing aggregation pipline operation
 
   try {
     const user = await UserModel.aggregate([
